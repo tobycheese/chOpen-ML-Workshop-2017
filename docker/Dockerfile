@@ -1,0 +1,61 @@
+FROM debian:stretch-slim
+LABEL maintainer "tobycheese https://github.com/tobycheese/"
+
+# desired username
+ARG user=johndoe
+ARG basedir=/home
+
+####################################################################################################
+
+# install apt-utils to allow package configuration
+RUN apt-get update && apt-get install -y apt-utils
+
+# avoid nasty unable to initialize frontend errors
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
+# install base packages
+RUN apt-get update && apt-get install -y git mmv vim-tiny wget
+
+# install generic build dependencies
+RUN apt-get update && apt-get -y install make cmake gcc g++ gfortran
+
+####################################################################################################
+
+# Create homedir and user
+RUN useradd --create-home --base-dir=$basedir $user
+
+# install cpython 3 as well as pip and virtualenv
+RUN apt-get update && apt-get install -y python3 python3-dev python3-pip
+
+# install jupyter with notebook
+RUN pip3 install --upgrade pip
+RUN pip3 install jupyter
+
+# install machine learning and other useful stuff
+RUN pip3 install numpy scipy pandas scikit-learn ml_metrics h5py Pillow matplotlib seaborn joblib more_itertools
+
+####################################################################################################
+
+# configure notebook
+USER $user
+RUN mkdir $basedir/$user/.jupyter/ && jupyter notebook --generate-config
+WORKDIR $basedir/$user/.jupyter/
+RUN echo "c.NotebookApp.open_browser = False" >> jupyter_notebook_config.py && \
+    echo "c.JupyterApp.answer_yes = True" >> jupyter_notebook_config.py && \
+    echo "c.NotebookApp.ip = '*'" >> jupyter_notebook_config.py && \
+    echo "c.NotebookApp.allow_origin = '*'" >> jupyter_notebook_config.py && \
+    echo "c.NotebookApp.token = ''" >> jupyter_notebook_config.py && \
+    echo "c.NotebookApp.password = ''" >> jupyter_notebook_config.py
+
+####################################################################################################
+
+# cleanup to make image smaller (does this really help?)
+USER root
+RUN apt-get autoremove -y && apt-get clean
+RUN rm -r /root/.cache/
+
+WORKDIR $basedir/$user
+EXPOSE 8888
+USER $user
+# looks like tini really isn't needed anymore when running container with --init
+CMD /usr/local/bin/jupyter-notebook -y $user
