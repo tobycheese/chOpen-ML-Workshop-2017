@@ -19,11 +19,11 @@ Here you will find the environment to follow the workshop and to run the exercis
 
 ### MacOs
 1. Open terminal
-1. As above but replace /home with /Users
+1. As above but replace `/home` with `/Users`
 
 ### Windows (NEEDS VERIFICATION)
 1. Run cmd.exe
-1. As above but replace /home/yourname/your-dir-from-pt-3-above with c:\path\to\your-dir-from-pt-3-above
+1. As above but replace `/home/yourname/your-dir-from-pt-3-above` with `c:\path\to\your-dir-from-pt-3-above`
 
 ## Access environment
 * Browse to http://127.0.0.1:8888/
@@ -31,5 +31,5 @@ Here you will find the environment to follow the workshop and to run the exercis
 ## Stop environment
 1. Save all your open notebooks
 1. Find container id: `docker ps`
-1. Stop container: `docker stop <container-id>
+1. Stop container: `docker stop <container-id>`
 1. Stop Docker service
