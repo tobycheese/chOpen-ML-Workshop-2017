@@ -30,8 +30,11 @@ RUN apt-get update && apt-get install -y python3 python3-dev python3-pip
 RUN pip3 install --upgrade pip
 RUN pip3 install jupyter
 
-# install machine learning and other useful stuff
+# install 'generic' machine learning and other useful stuff
 RUN pip3 install numpy scipy pandas scikit-learn ml_metrics h5py Pillow matplotlib seaborn joblib more_itertools
+
+# install stuff needed for toy projects
+RUN pip3 install flickrapi
 
 ####################################################################################################
 
