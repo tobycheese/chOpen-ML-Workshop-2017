@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y apt-utils
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # install base packages
-RUN apt-get update && apt-get install -y git mmv vim-tiny wget
+RUN apt-get update && apt-get install -y curl git mmv vim-tiny wget
 
 # install generic build dependencies
 RUN apt-get update && apt-get -y install make cmake gcc g++ gfortran
@@ -33,8 +33,17 @@ RUN pip3 install jupyter
 # install 'generic' machine learning and other useful stuff
 RUN pip3 install numpy scipy pandas scikit-learn ml_metrics h5py Pillow matplotlib seaborn joblib more_itertools
 
+####################################################################################################
+
 # install stuff needed for toy projects
-RUN pip3 install flickrapi
+
+# google cloud sdk
+RUN echo "deb http://packages.cloud.google.com/apt cloud-sdk-stretch main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+RUN apt-get update && apt-get install -y google-cloud-sdk google-cloud-sdk-app-engine-python
+
+# all necessary python libs
+RUN pip3 install flickrapi google-cloud-vision
 
 ####################################################################################################
 
@@ -48,7 +57,6 @@ RUN echo "c.NotebookApp.open_browser = False" >> jupyter_notebook_config.py && \
     echo "c.NotebookApp.allow_origin = '*'" >> jupyter_notebook_config.py && \
     echo "c.NotebookApp.token = ''" >> jupyter_notebook_config.py && \
     echo "c.NotebookApp.password = ''" >> jupyter_notebook_config.py
-
 
 # Create dir for external data
 RUN ln -s /data /home/$user/toyprojects
