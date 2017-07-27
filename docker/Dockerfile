@@ -18,6 +18,9 @@ RUN apt-get update && apt-get install -y curl git mmv vim-tiny wget
 # install generic build dependencies
 RUN apt-get update && apt-get -y install make cmake gcc g++ gfortran
 
+# install computing libraries
+RUN apt-get update && apt-get install -y libopenblas-dev liblapack-dev 
+
 ####################################################################################################
 
 # Create homedir and user
@@ -42,8 +45,17 @@ RUN echo "deb http://packages.cloud.google.com/apt cloud-sdk-stretch main" | tee
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 RUN apt-get update && apt-get install -y google-cloud-sdk google-cloud-sdk-app-engine-python
 
+# instal dlib from source, needed for face_recognition
+RUN apt-get update && apt-get install -y libboost-all-dev
+RUN git clone https://github.com/davisking/dlib.git
+WORKDIR dlib
+RUN mkdir build && cd build && cmake .. && cmake --build . --config Release
+RUN python3 setup.py install
+WORKDIR ..
+RUN rm -r dlib
+
 # all necessary python libs
-RUN pip3 install flickrapi google-cloud-vision
+RUN pip3 install flickrapi google-cloud-vision face_recognition
 
 ####################################################################################################
 
