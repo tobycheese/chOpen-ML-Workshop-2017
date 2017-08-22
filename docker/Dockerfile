@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y python3 python3-dev python3-pip
 
 # install jupyter with notebook
 RUN pip3 install --upgrade pip
-RUN pip3 install jupyter
+RUN pip3 install jupyter jupyter_contrib_nbextensions
 
 # install 'generic' machine learning and other useful stuff
 RUN pip3 install numpy scipy pandas scikit-learn ml_metrics h5py Pillow matplotlib seaborn joblib more_itertools
@@ -61,7 +61,10 @@ RUN pip3 install flickrapi google-cloud-vision face_recognition
 
 # configure notebook
 USER $user
-RUN mkdir /home/$user/.jupyter/ && jupyter notebook --generate-config
+RUN mkdir /home/$user/.jupyter/ && jupyter notebook --generate-config && \
+    jupyter contrib nbextension install --user && \
+    jupyter nbextension enable rubberband/main && \
+    jupyter nbextension enable exercise2/main
 WORKDIR /home/$user/.jupyter/
 RUN echo "c.NotebookApp.open_browser = False" >> jupyter_notebook_config.py && \
     echo "c.JupyterApp.answer_yes = True" >> jupyter_notebook_config.py && \
