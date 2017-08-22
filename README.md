@@ -15,7 +15,7 @@ Here you will find the environment to follow the workshop and to run the exercis
 1. Open terminal
 1. Execute `docker run -d --init --rm --mount type=bind,src=/home/yourname/your-dir-from-pt-3-above,dst=/data -p 127.0.0.1:8888:8888 tobycheese/workshop2017`
 
-    (the first time you do this, the docker image will be downloaded)
+    (the first time you do this, the docker image will be downloaded, which will take a while)
 
 ### MacOs
 1. Open terminal
@@ -33,3 +33,7 @@ Here you will find the environment to follow the workshop and to run the exercis
 1. Find container id: `docker ps`
 1. Stop container: `docker stop <container-id>`
 1. Stop Docker service
+
+## Update environment
+1. Stop container if running: `docker stop <container-id>`
+1. Download updated image: `docker pull tobycheese/workshop2017`
