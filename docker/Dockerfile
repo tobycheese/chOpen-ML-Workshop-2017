@@ -54,6 +54,13 @@ RUN python3 setup.py install
 WORKDIR ..
 RUN rm -r dlib
 
+# xgboost
+SHELL ["/bin/bash", "--login", "-c"]
+WORKDIR /usr/local
+RUN git clone --recursive https://github.com/dmlc/xgboost
+RUN pushd . && cd xgboost && make -j4 && chown -R $user python-package && popd
+RUN cd /usr/local/xgboost/python-package && python3 setup.py install && rm -r build dist xgboost.egg-info
+
 # all necessary python libs
 RUN pip3 install flickrapi google-cloud-vision face_recognition plotly bokeh folium ggplot \
                  mlxtend 
