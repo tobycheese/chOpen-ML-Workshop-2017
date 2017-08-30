@@ -45,7 +45,7 @@ RUN echo "deb http://packages.cloud.google.com/apt cloud-sdk-stretch main" | tee
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 RUN apt-get update && apt-get install -y google-cloud-sdk google-cloud-sdk-app-engine-python
 
-# instal dlib from source, needed for face_recognition
+# install dlib from source, needed for face_recognition
 RUN apt-get update && apt-get install -y libboost-all-dev
 RUN git clone https://github.com/davisking/dlib.git
 WORKDIR dlib
@@ -55,7 +55,8 @@ WORKDIR ..
 RUN rm -r dlib
 
 # all necessary python libs
-RUN pip3 install flickrapi google-cloud-vision face_recognition
+RUN pip3 install flickrapi google-cloud-vision face_recognition plotly bokeh folium ggplot \
+                 mlxtend 
 
 ####################################################################################################
 
