@@ -64,7 +64,6 @@ RUN pip3 install flickrapi google-cloud-vision face_recognition plotly bokeh fol
 USER $user
 RUN mkdir /home/$user/.jupyter/ && jupyter notebook --generate-config && \
     jupyter contrib nbextension install --user && \
-    jupyter nbextension enable rubberband/main && \
     jupyter nbextension enable exercise2/main
 WORKDIR /home/$user/.jupyter/
 RUN echo "c.NotebookApp.open_browser = False" >> jupyter_notebook_config.py && \
