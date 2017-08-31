@@ -1,8 +1,11 @@
-FROM debian:stretch-slim
+FROM debian:buster-slim
 LABEL maintainer "tobycheese https://github.com/tobycheese/"
 
 # desired username
 ARG user=johndoe
+
+# use bash instead of sh while building (mainly for popd and pushd)
+SHELL ["/bin/bash", "--login", "-c"]
 
 ####################################################################################################
 
@@ -34,7 +37,8 @@ RUN pip3 install --upgrade pip
 RUN pip3 install jupyter jupyter_contrib_nbextensions
 
 # install 'generic' machine learning and other useful stuff
-RUN pip3 install numpy scipy pandas scikit-learn ml_metrics h5py Pillow matplotlib seaborn joblib more_itertools
+RUN pip3 install numpy scipy pandas scikit-learn mlxtend ml_metrics h5py Pillow joblib more_itertools \
+                 matplotlib seaborn plotly bokeh folium ggplot
 
 ####################################################################################################
 
@@ -55,15 +59,13 @@ WORKDIR ..
 RUN rm -r dlib
 
 # xgboost
-SHELL ["/bin/bash", "--login", "-c"]
 WORKDIR /usr/local
 RUN git clone --recursive https://github.com/dmlc/xgboost
 RUN pushd . && cd xgboost && make -j4 && chown -R $user python-package && popd
 RUN cd /usr/local/xgboost/python-package && python3 setup.py install && rm -r build dist xgboost.egg-info
 
-# all necessary python libs
-RUN pip3 install flickrapi google-cloud-vision face_recognition plotly bokeh folium ggplot \
-                 mlxtend 
+# more python libs
+RUN pip3 install flickrapi google-cloud-vision face_recognition
 
 ####################################################################################################
 
