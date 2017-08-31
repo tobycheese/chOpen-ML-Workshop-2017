@@ -7,6 +7,10 @@ Here you will find the environment to follow the workshop and to run the exercis
 ## Prepare environment
 
 1. Install [Docker](https://www.docker.com/)
+    * [Download for Windows 10](https://store.docker.com/editions/community/docker-ce-desktop-windows)
+    * [Download for Windows < 10](https://www.docker.com/products/docker-toolbox)
+    * [Download for Mac](https://store.docker.com/editions/community/docker-ce-desktop-mac)
+    * For Linux: Go to the [main page](https://www.docker.com/) and choose "Get Docker" at the top of the screen
 1. Start Docker Service
 1. Create a directory to hold workshop files
 
