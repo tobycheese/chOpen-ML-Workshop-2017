@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y apt-utils
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # install base packages
-RUN apt-get update && apt-get install -y curl git mmv vim-tiny wget
+RUN apt-get update && apt-get install -y curl git mmv vim-tiny wget unzip
 
 # install generic build dependencies
 RUN apt-get update && apt-get -y install make cmake gcc g++ gfortran
