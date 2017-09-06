@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y libopenblas-dev liblapack-dev
 
 ####################################################################################################
 
-# Create homedir and user
+# create homedir and user
 RUN useradd --create-home $user
 
 # install cpython 3 as well as pip and virtualenv
@@ -37,8 +37,8 @@ RUN pip3 install --upgrade pip
 RUN pip3 install jupyter jupyter_contrib_nbextensions
 
 # install 'generic' machine learning and other useful stuff
-RUN pip3 install numpy scipy pandas scikit-learn mlxtend ml_metrics h5py Pillow joblib more_itertools \
-                 matplotlib seaborn plotly bokeh folium ggplot
+RUN pip3 install numpy scipy pandas scikit-learn mlxtend ml_metrics h5py Pillow joblib \ 
+                 more_itertools matplotlib seaborn plotly bokeh folium ggplot
 
 ####################################################################################################
 
@@ -65,12 +65,16 @@ RUN pushd . && cd xgboost && make -j4 && chown -R $user python-package && popd
 RUN cd /usr/local/xgboost/python-package && python3 setup.py install && rm -r build dist xgboost.egg-info
 
 # more python libs
-RUN pip3 install flickrapi google-cloud-vision face_recognition
+RUN pip3 install flickrapi google-cloud-vision face_recognition monkeylearn spacy gensim textblob
+
+# nlp models
+RUN python3 -m spacy download en
+USER $user
+RUN python3 -m textblob.download_corpora
 
 ####################################################################################################
 
 # configure notebook
-USER $user
 RUN mkdir /home/$user/.jupyter/ && jupyter notebook --generate-config && \
     jupyter contrib nbextension install --user && \
     jupyter nbextension enable exercise2/main
