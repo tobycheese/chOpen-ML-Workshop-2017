@@ -1,2 +1,3 @@
-# my local copy of thge docker image
-workshop.dockerimg.gz
+.DS_Store
+.ipynb_checkpoints
+core
