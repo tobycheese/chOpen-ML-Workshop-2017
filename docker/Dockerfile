@@ -32,9 +32,9 @@ RUN useradd --create-home $user
 # install cpython 3 as well as pip and virtualenv
 RUN apt-get update && apt-get install -y python3 python3-dev python3-pip
 
-# install jupyter with notebook
+# install jupyter with notebook, exercise extension and RISE to display slides
 RUN pip3 install --upgrade pip
-RUN pip3 install jupyter jupyter_contrib_nbextensions
+RUN pip3 install jupyter jupyter_contrib_nbextensions RISE
 
 # install 'generic' machine learning and other useful stuff
 RUN pip3 install numpy scipy pandas scikit-learn mlxtend ml_metrics h5py Pillow joblib \ 
@@ -77,6 +77,8 @@ RUN python3 -m textblob.download_corpora
 # configure notebook
 RUN mkdir /home/$user/.jupyter/ && jupyter notebook --generate-config && \
     jupyter contrib nbextension install --user && \
+    jupyter nbextension install rise --py --user && \
+    jupyter nbextension enable rise --py --user && \
     jupyter nbextension enable exercise2/main
 WORKDIR /home/$user/.jupyter/
 RUN echo "c.NotebookApp.open_browser = False" >> jupyter_notebook_config.py && \
